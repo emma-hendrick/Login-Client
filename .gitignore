@@ -1,3 +1,7 @@
+# Keys
+client.json
+server.json
+
 # Logs
 logs
 *.log
