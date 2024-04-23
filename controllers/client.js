@@ -53,6 +53,8 @@ const getCredential = async (req, res, next) => {
 
             privatekey = client.privatekey;
 
+            console.log(username)
+
             const user_decrypted = crypto.privateDecrypt({ key: privatekey, padding: crypto.constants.RSA_PKCS1_OAEP_PADDING }, Buffer.from(username.data));
             const pass_decrypted = crypto.privateDecrypt({ key: privatekey, padding: crypto.constants.RSA_PKCS1_OAEP_PADDING }, Buffer.from(password.data));
             data = {
