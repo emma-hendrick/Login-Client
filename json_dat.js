@@ -1,7 +1,9 @@
 const fs = require('fs');
 
+const user = process.argv[2];
+
 // Path for keys
-const clientFile = './client.json';
+const clientFile = !user ? './client.json': `./keys/${user}.json`
 const serverFile = './server.json';
 
 // Function to read data from JSON file
