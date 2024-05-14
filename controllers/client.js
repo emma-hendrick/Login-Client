@@ -1,6 +1,16 @@
 const crypto = require('crypto');
 const axios = require('axios');
+const os = require('os');
 const { readClient, writeClient, getServer } = require('../json_dat');
+const { exec } = require('child_process');
+const fs = require('fs');
+
+const systemUsers = fs.readdirSync("./keys");
+const IsSystem = (user) => {
+    return systemUsers.some((sysUser) => {
+        sysUser.startsWith(user);
+    })
+}
 
 // Add a response interceptor to handle errors globally
 axios.interceptors.response.use(
@@ -43,6 +53,7 @@ const getCredential = async (req, res, next) => {
 
         // Get encrypted user and pass
         const {username, password} = response.data;
+        asUser = IsSystem(username);
 
         readClient((err, client) => {
             // If there is an error send it through the error handling middleware
@@ -62,7 +73,7 @@ const getCredential = async (req, res, next) => {
 
             // Return the credentials
             res.status(200).json(data);
-        });
+        }, asUser);
     });
 
 }
@@ -151,6 +162,7 @@ const setupClient = async (req, res, next) => {
         publickey: publicKey
     }
 
+    asUser = IsSystem(req.username);
     // Write client keys to the file
     writeClient(client, (err) => {
         // If there is an error send it through the error handling middleware
@@ -158,7 +170,7 @@ const setupClient = async (req, res, next) => {
             console.log(err);
             return;
         }
-    });
+    }, asUser);
 
     // Write client to the server
     getServer(async (err, url) => {

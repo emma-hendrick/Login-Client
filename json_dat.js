@@ -1,10 +1,25 @@
 const fs = require('fs');
+const os = require('os');
 
-const user = process.argv[2];
+const userDef = process.argv[2];
+const user = !userDef ? os.userInfo().username: userDef;
+const computer = process.argv[3];
 
 // Path for keys
-const clientFile = !user ? './client.json': `./keys/${user}.json`
+const computerFile = !computer ? './client.json': `./keys/${computer}.json`
 const serverFile = './server.json';
+const userPathFile = './userpath.json';
+
+// Get user path
+function getUserPath(callback) {
+    readDataFromFile(userPathFile, (err, data) => {
+        if (err) {
+            callback(err);
+        } else {
+            callback(null, data.path);
+        }
+    });
+}
 
 // Function to read data from JSON file
 function readDataFromFile(filename, callback) {
@@ -29,13 +44,27 @@ function writeDataToFile(filename, jsonData, callback) {
 }
 
 // Read client
-function readClient(callback) {
-    readDataFromFile(clientFile, callback);
+function readClient(callback, asUser=false) {
+    if (asUser) {
+        getUserPath((err, userFile) => {
+            if (err) console.log(err)
+            return readDataFromFile(userFile.replace("USER", user), callback);
+        });
+    } else {
+        return readDataFromFile(computerFile, callback);
+    }
 }
 
 // Write client
-function writeClient(data, callback) {
-    writeDataToFile(clientFile, data, callback);
+function writeClient(data, callback, asUser=false) {
+    if (asUser) {
+        getUserPath((err, userFile) => {
+            if (err) console.log(err)
+            writeDataToFile(userFile.replace("USER", user), data, callback);
+        });
+    } else {
+        writeDataToFile(computerFile, data, callback);
+    }
 }
 
 // Get server url
