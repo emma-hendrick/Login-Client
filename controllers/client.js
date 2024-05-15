@@ -160,7 +160,8 @@ const setupClient = async (req, res, next) => {
         publickey: publicKey
     }
 
-    asUser = IsSystem(req.username);
+    asUser = !IsSystem(req.username);
+
     // Write client keys to the file
     writeClient(client, (err) => {
         // If there is an error send it through the error handling middleware
