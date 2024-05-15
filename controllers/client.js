@@ -1,8 +1,6 @@
 const crypto = require('crypto');
 const axios = require('axios');
-const os = require('os');
 const { readClient, writeClient, getServer } = require('../json_dat');
-const { exec } = require('child_process');
 const fs = require('fs');
 
 const systemUsers = fs.readdirSync("./keys");
