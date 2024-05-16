@@ -6,7 +6,7 @@ const fs = require('fs');
 const systemUsers = fs.readdirSync("./keys");
 const IsSystem = (user) => {
     return systemUsers.some((sysUser) => {
-        sysUser.startsWith(user);
+        return sysUser.startsWith(user);
     })
 }
 
@@ -51,7 +51,7 @@ const getCredential = async (req, res, next) => {
 
         // Get encrypted user and pass
         const {username, password} = response.data;
-        asUser = !IsSystem(username);
+        asUser = !IsSystem(req.username);
 
         readClient((err, client) => {
             // If there is an error send it through the error handling middleware

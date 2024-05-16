@@ -23,6 +23,7 @@ function getUserPath(callback) {
 
 // Function to read data from JSON file
 function readDataFromFile(filename, callback) {
+    console.log(filename)
     fs.readFile(filename, 'utf8', (err, data) => {
         if (err) {
             callback(err);
