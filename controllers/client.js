@@ -51,7 +51,7 @@ const getCredential = async (req, res, next) => {
 
         // Get encrypted user and pass
         const {username, password} = response.data;
-        asUser = IsSystem(username);
+        asUser = !IsSystem(username);
 
         readClient((err, client) => {
             // If there is an error send it through the error handling middleware
