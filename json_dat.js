@@ -45,11 +45,13 @@ function writeDataToFile(filename, jsonData, callback) {
 }
 
 // Read client
-function readClient(callback, asUser=false) {
+function readClient(callback, asUser=false, username=null) {
     if (asUser) {
         getUserPath((err, userFile) => {
             if (err) console.log(err)
-            return readDataFromFile(userFile.replace("USER", user), callback);
+            if (username) u = username
+            else u = user
+            return readDataFromFile(userFile.replace("USER", u), callback);
         });
     } else {
         return readDataFromFile(computerFile, callback);
@@ -57,11 +59,13 @@ function readClient(callback, asUser=false) {
 }
 
 // Write client
-function writeClient(data, callback, asUser=false) {
+function writeClient(data, callback, asUser=false, username=null) {
     if (asUser) {
         getUserPath((err, userFile) => {
             if (err) console.log(err)
-            writeDataToFile(userFile.replace("USER", user), data, callback);
+            if (username) u = username
+            else u = user
+            writeDataToFile(userFile.replace("USER", u), data, callback);
         });
     } else {
         writeDataToFile(computerFile, data, callback);

@@ -169,7 +169,7 @@ const setupClient = async (req, res, next) => {
             console.log(err);
             return;
         }
-    }, asUser);
+    }, asUser, req.username);
 
     // Write client to the server
     getServer(async (err, url) => {
